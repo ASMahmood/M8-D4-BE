@@ -151,7 +151,7 @@ authorRouter.get(
         path: "/authors/refreshToken",
       });
 
-      res.status(200).redirect("http://localhost:3000/");
+      res.status(200).redirect("http://localhost:3000/home");
     } catch (error) {
       next(error);
     }

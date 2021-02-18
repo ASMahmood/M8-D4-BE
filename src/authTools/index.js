@@ -50,7 +50,7 @@ const verifyAccess = (token) =>
 
 const authorize = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
+    const token = req.cookies.accessToken;
     const decodedToken = await verifyAccess(token);
     const author = await AuthorModel.findOne({ _id: decodedToken._id });
     if (!author) {

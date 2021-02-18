@@ -2,6 +2,8 @@ const express = require("express");
 const AuthorModel = require("./schema");
 const AuthorSchema = require("./schema");
 const { authenticate, authorize } = require("../authTools");
+const passport = require("passport");
+require("../authTools/googleAuth");
 
 const authorRouter = express.Router();
 
@@ -32,7 +34,14 @@ authorRouter.post("/login", async (req, res, next) => {
       res.status(404).send("NO USER FOUND");
     } else {
       const tokens = await authenticate(author);
-      res.send(tokens);
+      res.cookie("accessToken", tokens.access, {
+        httpOnly: true,
+      });
+      res.cookie("refreshToken", tokens.refresh, {
+        httpOnly: true,
+        path: "/authors/refreshToken",
+      });
+      res.send("okie dokie artichockie");
     }
   } catch (error) {
     console.log(error);
@@ -107,7 +116,14 @@ authorRouter.post("/refresh/Token/token", async (req, res, next) => {
   } else {
     try {
       const newTokens = await refreshToken(oldRefresh);
-      res.send(newTokens);
+      res.cookie("accessToken", newTokens.access, {
+        httpOnly: true,
+      });
+      res.cookie("refreshToken", newTokens.refresh, {
+        httpOnly: true,
+        path: "/authors/refreshToken",
+      });
+      res.send("okie dokie artichockie");
     } catch (error) {
       console.log(error);
       const err = new Error(error);
@@ -116,5 +132,30 @@ authorRouter.post("/refresh/Token/token", async (req, res, next) => {
     }
   }
 });
+
+authorRouter.get(
+  "/3rdParty/google",
+  passport.authenticate("google", { scope: ["profile", "email"] }) //AUTHENTICATES WITH PASSPORT, USES "google" ROUTE, RETURNS PROFILE INFO AND EMAIL DATA
+);
+
+authorRouter.get(
+  "/3rdParty/google/Redirect",
+  passport.authenticate("google"),
+  async (req, res, next) => {
+    try {
+      res.cookie("accessToken", req.user.tokens.access, {
+        httpOnly: true,
+      });
+      res.cookie("refreshToken", req.user.tokens.refresh, {
+        httpOnly: true,
+        path: "/authors/refreshToken",
+      });
+
+      res.status(200).redirect("http://localhost:3000/");
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = authorRouter;

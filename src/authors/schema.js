@@ -7,7 +7,7 @@ const AuthorSchema = new Schema(
     img: String,
     articles: [{ type: Schema.Types.ObjectId, ref: "Articles" }],
     email: { type: String, required: true },
-    password: { type: String, required: true, minlength: 8, selected: false },
+    password: { type: String, minlength: 8, selected: false },
     tokenArray: [{ token: String }],
   },
   { timestamps: true }

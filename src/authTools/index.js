@@ -95,4 +95,4 @@ const refreshToken = async (oldToken) => {
   return { accessToken: newAccess, refreshToken: newRefresh };
 };
 
-module.exports = { authenticate, authorize, refreshToken };
+module.exports = { authenticate, authorize, refreshToken, verifyAccess };

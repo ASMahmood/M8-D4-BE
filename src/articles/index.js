@@ -111,7 +111,9 @@ articleRouter.post("/:id", authorize, async (req, res) => {
 
 articleRouter.get("/:id/reviews", authorize, async (req, res) => {
   try {
-    const reviews = await ArticleSchema.findById(req.params.id, { reviews: 1 });
+    const reviews = await ArticleSchema.findById(req.params.id, {
+      reviews: 1,
+    }).populate("reviews");
     res.status(200).send(reviews.reviews);
   } catch (error) {
     console.log(error);

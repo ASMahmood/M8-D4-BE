@@ -1,7 +1,7 @@
 const express = require("express");
 const AuthorModel = require("./schema");
 const AuthorSchema = require("./schema");
-const { authenticate, authorize } = require("../authTools");
+const { authenticate, authorize, verifyAccess } = require("../authTools");
 const passport = require("passport");
 require("../authTools/googleAuth");
 
@@ -157,5 +157,17 @@ authorRouter.get(
     }
   }
 );
+
+authorRouter.get("/homepage/login/help/me", async (req, res, next) => {
+  try {
+    const token = req.cookies.accessToken;
+    const decodedToken = await verifyAccess(token);
+    const author = await AuthorModel.findOne({ _id: decodedToken._id });
+    res.send(author);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
 
 module.exports = authorRouter;

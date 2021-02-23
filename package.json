@@ -4,17 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\"",
     "dev": "nodemon -r dotenv/config ./src/server.js",
     "debug": "nodemon --inspect -r dotenv/config ./src/server.js",
-    "start": "node -r dotenv/config ./src/server.js"
-  },
-  "engines": {
-    "node": "v12.18.4"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ASMahmood/M6-D1.git"
+    "start": "node  ./src/server.js"
   },
   "keywords": [],
   "author": "",

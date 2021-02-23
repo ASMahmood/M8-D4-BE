@@ -11,6 +11,11 @@ const authorRoute = require("./authors");
 const server = express();
 const port = process.env.PORT;
 
+const loggerMiddleware = (req, res, next) => {
+  console.log(`Logged ${req.url} ${req.method} -- ${new Date()}`);
+  next();
+};
+
 const whitelist = [
   "http://localhost:3000",
   "https://letthepowerofaaronsaveus.azurewebsites.net",
